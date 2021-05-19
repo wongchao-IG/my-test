@@ -9,9 +9,11 @@
 int main()
 {
 	//ABC##D##E#F#H##G##
+	const char *str = "ABC##DE##F##G#H#";
 	BinTree bt;
 	BinTreeInit(&bt);
-	BinTreeCreate(&bt);
+	//BinTreeCreate(&bt);
+	BinTreeCreateByStr(&bt, str);
 
 	printf("VLR:>");
 	PreOrder(&bt);

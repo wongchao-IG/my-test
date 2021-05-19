@@ -99,14 +99,46 @@ BinTreeNode* ListQueueFront(ListQueue *pq)
 }
 #endif // LEVEL_ORDER
 
+//创建
 void BinTreeInit(BinTree *pbt);
 void BinTreeCreate(BinTree *bt);
 void BinTreeCreate_1(BinTreeNode **t);
 BinTreeNode *BinTreeCreate_2();
-
 void BinTreeCreateByStr(BinTree *bt, const char *str);
 BinTreeNode* BinTreeCreateByStr_1(const char *str, int *pindex);
-//创建
+
+//遍历
+void PreOrder(BinTree *t);
+void PreOrder_1(BinTreeNode *t);
+void InOrder(BinTree *t);
+void InOrder_1(BinTreeNode *t);
+void PostOrder(BinTree *t);
+void PostOrder_1(BinTreeNode *t);
+void LevelOrder(BinTree *t);
+void LevelOrder_1(BinTreeNode *bt);
+
+
+//求二叉树
+int BinTreeSize(BinTree *bt);//求二叉树节点个数
+int BinTreeSize_1(BinTreeNode *t);
+int BinTreeHeight(BinTree *bt);//求二叉树高度
+int BinTreeHeight_1(BinTreeNode *t);
+
+
+//查找二叉树节点
+BinTreeNode* BinTreeFind(BinTree *bt, ElemType key);
+BinTreeNode* BinTreeFind_1(BinTreeNode *t, ElemType key);
+BinTreeNode* BinTreeParent(BinTree *bt, ElemType key);
+BinTreeNode* BinTreeParent_1(BinTreeNode *t, ElemType key);
+
+//拷贝二叉树
+BinTreeNode *BinTreeCopy(BinTree *bt);
+
+//判断二叉树
+bool BinTreeEqual(BinTree *bt1, BinTree bt2);
+
+
+
 void BinTreeCreateByStr(BinTree *bt,const char *str)
 {
 	int index = 0;
@@ -129,31 +161,7 @@ BinTreeNode* BinTreeCreateByStr_1(const char *str, int *pindex)
 	}
 }
 
-//遍历
-void PreOrder(BinTree *t);
-void PreOrder_1(BinTreeNode *t);
-void InOrder(BinTree *t);
-void InOrder_1(BinTreeNode *t);
-void PostOrder(BinTree *t);
-void PostOrder_1(BinTreeNode *t);
-void LevelOrder(BinTree *t);
-void LevelOrder_1(BinTreeNode *bt);
 
-
-int BinTreeSize(BinTree *bt);//求二叉树节点个数
-int BinTreeSize_1(BinTreeNode *t);
-int BinTreeHeight(BinTree *bt);//求二叉树高度
-int BinTreeHeight_1(BinTreeNode *t);
-
-//查询
-BinTreeNode* BinTreeFind(BinTree *bt, ElemType key);
-BinTreeNode* BinTreeParent(BinTree *bt, ElemType key);
-
-//拷贝二叉树
-BinTreeNode *BinTreeCopy(BinTree *bt);
-
-//判断二叉树
-bool BinTreeEqual(BinTree *bt1, BinTree bt2);
 
 
 void BinTreeInit(BinTree *pbt)
@@ -209,7 +217,7 @@ void PreOrder_1(BinTreeNode *t)
 {
 	if (t != NULL)
 	{
-		printf("%C ", t->data);
+		printf("%c ", t->data);
 		PreOrder_1(t->LeftChild);
 		PreOrder_1(t->RightChild);
 	}
@@ -291,5 +299,40 @@ int BinTreeHeight_1(BinTreeNode *t)
 		int right_h = BinTreeHeight_1(t->RightChild);
 		return (left_h > right_h ? left_h : right_h) + 1;
 	}
+}
+
+BinTreeNode* BinTreeFind(BinTree *bt, ElemType key)
+{
+	return BinTreeFind_1(bt->root, key);
+}
+
+BinTreeNode* BinTreeFind_1(BinTreeNode *t, ElemType key)
+{
+	BinTreeNode *p;
+	if (t == NULL || t->data == key)
+		return t;
+	p = BinTreeFind_1(t->LeftChild, key);
+	if (p != NULL)
+		return p;
+	return BinTreeFind_1(t->RightChild, key);
+}
+//查找节点的父节点
+BinTreeNode* BinTreeParent(BinTree *bt, ElemType key)
+{
+	return BinTreeParent_1(bt->root, key);
+}
+
+BinTreeNode* BinTreeParent_1(BinTreeNode *t, ElemType key)
+{
+	BinTreeNode *p;
+	if (t == NULL || t->data == key)
+		return t;
+	if ((t->LeftChild != NULL && t->LeftChild->data == key) ||
+		(t->RightChild != NULL && t->RightChild->data == key))
+		return t;
+	p = BinTreeParent_1(t->LeftChild, key);
+	if (p != NULL)
+		return p;
+	return BinTreeParent_1(t->RightChild, key);
 }
 #endif // !_TREE_H_
