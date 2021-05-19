@@ -99,15 +99,36 @@ BinTreeNode* ListQueueFront(ListQueue *pq)
 }
 #endif // LEVEL_ORDER
 
-
-
-#undef ElemType
-#define ElemType char
 void BinTreeInit(BinTree *pbt);
 void BinTreeCreate(BinTree *bt);
 void BinTreeCreate_1(BinTreeNode **t);
 BinTreeNode *BinTreeCreate_2();
+
+void BinTreeCreateByStr(BinTree *bt, const char *str);
+BinTreeNode* BinTreeCreateByStr_1(const char *str, int *pindex);
 //创建
+void BinTreeCreateByStr(BinTree *bt,const char *str)
+{
+	int index = 0;
+	BinTreeCreateByStr_1(str, &index);
+}
+BinTreeNode* BinTreeCreateByStr_1(const char *str, int *pindex)
+{
+	if (str[*pindex] == '#' || str[*pindex] == NULL)
+		return NULL;
+	else
+	{
+		BinTreeNode *t = (BinTreeNode*)malloc(sizeof(BinTreeNode));
+		assert(t != NULL);
+		t->data = str[*pindex];
+		(*pindex)++;
+		BinTreeCreateByStr_1(str, pindex);
+		(*pindex)++;
+		BinTreeCreateByStr_1(str, pindex);
+		return t;
+	}
+}
+
 //遍历
 void PreOrder(BinTree *t);
 void PreOrder_1(BinTreeNode *t);
@@ -133,15 +154,17 @@ BinTreeNode *BinTreeCopy(BinTree *bt);
 
 //判断二叉树
 bool BinTreeEqual(BinTree *bt1, BinTree bt2);
-void BinTreeCreate(BinTree *bt)
-{
-	BinTreeCreate_1(&bt->root);
-	//BinTreeCreate_2();
-}
+
 
 void BinTreeInit(BinTree *pbt)
 {
 	pbt->root = NULL;
+}
+
+void BinTreeCreate(BinTree *bt)
+{
+	BinTreeCreate_1(&bt->root);
+	//BinTreeCreate_2();
 }
 
 void BinTreeCreate_1(BinTreeNode **t)
@@ -156,7 +179,7 @@ void BinTreeCreate_1(BinTreeNode **t)
 		assert(*t != NULL);
 		(*t)->data = item;
 		BinTreeCreate_1(&(*t)->LeftChild);
-		BinTreeCreate_1(&(*t)->RightChild);
+		BinTreeCreate_1(&((*t)->RightChild));
 	}
 
 }
